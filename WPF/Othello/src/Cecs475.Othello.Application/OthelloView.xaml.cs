@@ -73,13 +73,21 @@ namespace Cecs475.Othello.Application {
 			return token;
 		}
 
-		private static SolidColorBrush GetFillBrush(int player) {
-			if (player == 1)
-				return BLACK_BRUSH;
-			return WHITE_BRUSH;
-		}
+        private static ImageBrush GetFillBrush(int player)
+        {
+            if (player == 1)
+            {
+                ImageBrush mehrdadBrush = new ImageBrush();
+                mehrdadBrush.ImageSource = new BitmapImage(new Uri("C:\\Users\\013505594\\Desktop\\mehrdad.jfif"));
+                return mehrdadBrush;
+            }
+            ImageBrush frankBrush = new ImageBrush();
+            frankBrush.ImageSource = new BitmapImage(new Uri("C:\\Users\\013505594\\Desktop\\frank.jpg"));
+            return frankBrush;
+        }
 
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
 			throw new NotImplementedException();
 		}
 	}
