@@ -54,6 +54,36 @@ namespace Cecs475.Othello.Application {
 		}
 	}
 
+    /// <summary>
+    /// Converts from an integer board value to a formatted string for the score
+    /// </summary>
+    public class OthelloScoreConverter : IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            int boardValue = (int)value;
+            if (boardValue > 0) return "Mehrdad is winning by " + boardValue;
+            else if (boardValue < 0) return "Frank is winning by " + Math.Abs(boardValue);
+            else return "tie game";
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+            throw new NotImplementedException();
+        }
+    }
+
+    /// <summary>
+    /// Converts from an integer player to a string, either 'Mehrdad' or 'Frank'
+    /// </summary>
+    public class OthelloPlayerConverter : IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            int player = (int)value;
+            if (player == 1) return "Mehrdad";
+            else return "Frank";
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 	/// <summary>
 	/// Converts from an integer player number to an Ellipse representing that player's token.
 	/// </summary>

@@ -28,13 +28,20 @@ namespace Cecs475.Othello.Application {
 	}
 
 	public class OthelloViewModel : INotifyPropertyChanged {
-		private OthelloBoard mBoard;
+        private OthelloBoard mBoard;
 		private ObservableCollection<OthelloSquare> mSquares;
 
 		public event PropertyChangedEventHandler PropertyChanged;
 		private void OnPropertyChanged(string name) {
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 		}
+
+        //property for returning the current player
+        public int CurrentPlayer {
+            get {
+                return mBoard.CurrentPlayer;
+            }
+        }
 
 		public OthelloViewModel() {
 			mBoard = new OthelloBoard();
@@ -61,19 +68,32 @@ namespace Cecs475.Othello.Application {
 					break;
 				}
 			}
-
 			PossibleMoves = new HashSet<BoardPosition>(mBoard.GetPossibleMoves().Select(m => m.Position));
-			var newSquares =
-				from r in Enumerable.Range(0, 8)
-				from c in Enumerable.Range(0, 8)
-				select new BoardPosition(r, c);
-			int i = 0;
-			foreach (var pos in newSquares) {
-				mSquares[i].Player = mBoard.GetPieceAtPosition(pos);
-				i++;
-			}
+            UpdateSquares();
 			OnPropertyChanged(nameof(BoardValue));
+            OnPropertyChanged(nameof(CurrentPlayer));
 		}
+
+        public void Undo_Last_Move() {
+            if(mBoard.MoveHistory.Count > 0) {
+                mBoard.UndoLastMove();
+                OnPropertyChanged(nameof(BoardValue));
+                PossibleMoves = new HashSet<BoardPosition>(mBoard.GetPossibleMoves().Select(m => m.Position));
+                UpdateSquares();
+            }
+        }
+
+        public void UpdateSquares() {
+            var newSquares =
+                   from r in Enumerable.Range(0, 8)
+                   from c in Enumerable.Range(0, 8)
+                   select new BoardPosition(r, c);
+            int i = 0;
+            foreach (var pos in newSquares) {
+                mSquares[i].Player = mBoard.GetPieceAtPosition(pos);
+                i++;
+            }
+        }
 
 		public ObservableCollection<OthelloSquare> Squares {
 			get { return mSquares; }
